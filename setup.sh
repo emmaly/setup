@@ -71,12 +71,18 @@ grep -q "~/.ps1.bash" ~/.bashrc || echo "source ~/.ps1.bash" | tee -a ~/.bashrc
 # Go install
 GO_VERSION=$(gsutil ls gs://golang/ | grep -Ev '(rc|beta|asc|sha256)' | grep linux-amd64.tar.gz | cut -d/ -f4 | sed 's/^go//' | sed 's/\.linux-amd64\.tar\.gz$//' | sort --version-sort | tail -n1)
 [ -z "$GO_VERSION" ] && exit 1
-## Remove old Go if exists
-sudo rm -Rf /usr/local/go
-## Fetch new Go, install, and cleanup
-gsutil cp gs://golang/go${GO_VERSION}.linux-amd64.tar.gz /tmp/go.tgz && \
-sudo tar -C /usr/local -zxf /tmp/go.tgz && \
-rm /tmp/go.tgz
+## Check if currently installed version matches
+KEEP_GO=
+[ -f "/usr/local/go/bin/go" ] && /usr/local/go/bin/go version | grep -q " go$GO_VERSION " && KEEP_GO=1
+## If we're not keeping current version (or it is absent), replace and/or fetch and install
+if [ -z "$KEEP_GO" ]; then
+	### Remove old Go if exists
+	sudo rm -Rf /usr/local/go
+	### Fetch new Go, install, and cleanup
+	gsutil cp gs://golang/go${GO_VERSION}.linux-amd64.tar.gz /tmp/go.tgz && \
+	sudo tar -C /usr/local -zxf /tmp/go.tgz && \
+	rm /tmp/go.tgz
+fi
 ## Setup Go
 mkdir -p ~/go/{src,bin}
 grep -q "/usr/local/go/bin" ~/.profile || echo "PATH=\$PATH:/usr/local/go/bin" | tee -a ~/.profile
