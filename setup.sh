@@ -153,4 +153,4 @@ elif grep -q "# disabled on upgrade to" $CODE_SOURCE_PART; then
 	WRITE_SOURCE=1
 fi
 [ "$WRITE_SOURCE" -eq "1" ] && echo -e "### THIS FILE IS AUTOMATICALLY CONFIGURED ###\n# You may comment out this entry, but any other modifications may be lost.\ndeb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" | sudo tee $CODE_SOURCE_PART
-sudo apt update && sudo apt install code
+sudo apt update && sudo apt install -y --no-install-recommends code
