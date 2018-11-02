@@ -66,7 +66,7 @@ echo "source ~/.sensible.bash" | tee -a ~/.bashrc
 #grep -q "/powerline.sh" ~/.bashrc || echo "source /usr/share/powerline/bindings/bash/powerline.sh" | tee -a ~/.bashrc
 
 # Custom PS1 prompt
-[ ! -f ~/.ps1.bash ] && cp ps1.bash -o ~/.ps1.bash
+[ ! -f ~/.ps1.bash ] && cp ps1.bash ~/.ps1.bash
 grep -q "~/.ps1.bash" ~/.bashrc || echo "source ~/.ps1.bash" | tee -a ~/.bashrc
 
 # Go install
