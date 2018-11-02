@@ -116,9 +116,12 @@ sudo fc-cache -f
 VSCODE_VERSION=1.28
 VSCODE_SHA256=fa5f9a4349edc2b9931631c67fdfaa920270ab1b27c34e3841d987406a588dd4
 if [ ! -z "${VSCODE_VERSION}" ]; then
-	dpkg -l code 2>/dev/null | grep ^ii >/dev/null || \
-	curl -L https://vscode-update.azurewebsites.net/${VSCODE_VERSION}/linux-deb-x64/stable > /tmp/vscode.deb && \
-	sha256sum /tmp/vscode.deb | grep -q "${VSCODE_SHA256}" && \
-	dpkg -i /tmp/vscode.deb && \
-	rm -f /tmp/vscode.deb
+	if dpkg -l code 2>/dev/null | grep ^ii >/dev/null; then
+		echo "Skipping VS Code..."
+	else
+		[ ! -f /tmp/vscode.deb ] && curl -L https://vscode-update.azurewebsites.net/${VSCODE_VERSION}/linux-deb-x64/stable > /tmp/vscode.deb
+		[ -f /tmp/vscode.deb ] && sha256sum /tmp/vscode.deb | grep -q "${VSCODE_SHA256}" && \
+		sudo dpkg -i /tmp/vscode.deb && \
+		rm -f /tmp/vscode.deb
+	fi
 fi
