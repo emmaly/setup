@@ -48,17 +48,18 @@ mkdir -p ~/.local/share/konsole ~/.config
 [ ! -f ~/.config/konsolerc ] && cp konsolerc -o ~/.config/konsolerc
 
 # Google Cloud SDK install
-[ ! -f /etc/apt/sources.list.d/google-cloud-sdk.list ] && \
-curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
-echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list >/dev/null && \
-sudo apt-get update
+if [ ! -f /etc/apt/sources.list.d/google-cloud-sdk.list ]; then
+	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
+	echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list >/dev/null && \
+	sudo apt-get update
+fi
 dpkg -l google-cloud-sdk 2>/dev/null | grep ^ii >/dev/null || sudo apt-get install --no-install-recommends -y google-cloud-sdk
 dpkg -l kubectl 2>/dev/null | grep ^ii >/dev/null || sudo apt-get install --no-install-recommends -y kubectl
 
 # Sensible Bash
-curl https://raw.githubusercontent.com/mrzool/bash-sensible/master/sensible.bash -o ~/.sensible.bash
+[ ! -f ~/.sensible.bash ] && curl https://raw.githubusercontent.com/mrzool/bash-sensible/master/sensible.bash -o ~/.sensible.bash
 [ -f ~/.sensible.bash ] && grep -q "~/.sensible.bash" ~/.bashrc || \
-echo "source ~/.sensible.bash" | tee -a ~/.bashrc && \
+echo "source ~/.sensible.bash" | tee -a ~/.bashrc
 
 # Powerline config
 #grep -q "powerline-daemon -q" ~/.bashrc || echo "powerline-daemon -q" | tee -a ~/.bashrc
@@ -92,25 +93,26 @@ grep -q "~/go/bin" ~/.bashrc || echo "PATH=\$PATH:~/go/bin" | tee -a ~/.bashrc
 
 # Setup Fonts
 FONTDIR=/usr/share/fonts/emmalyfonts
-sudo rm -Rf $FONTDIR
-sudo mkdir -p $FONTDIR
-## Google Cloud Fonts
-[ ! -f /tmp/googlefonts.zip ] && curl -L https://github.com/google/fonts/archive/master.zip > /tmp/googlefonts.zip
-sudo mkdir -p $FONTDIR/google-cloud-fonts
-sudo unzip -q /tmp/googlefonts.zip -d $FONTDIR/google-cloud-fonts
-rm /tmp/googlefonts.zip
-## Go font
-sudo mkdir -p $FONTDIR/gofont
-git clone --depth=1 https://go.googlesource.com/image /tmp/gofont
-sudo cp /tmp/gofont/font/gofont/ttfs/*.ttf $FONTDIR/gofont
-rm -Rf /tmp/gofont
-## FiraCode font
-sudo mkdir -p $FONTDIR/firacode
-git clone --depth=1 https://github.com/tonsky/FiraCode.git /tmp/firacode
-sudo cp /tmp/firacode/distr/ttf/*.ttf $FONTDIR/firacode
-rm -Rf /tmp/firacode
-## Flush the Font Cache
-sudo fc-cache -f
+if [ ! -d "$FONTDIR" ]; then
+	sudo mkdir -p $FONTDIR
+	## Google Cloud Fonts
+	[ ! -f /tmp/googlefonts.zip ] && curl -L https://github.com/google/fonts/archive/master.zip > /tmp/googlefonts.zip
+	sudo mkdir -p $FONTDIR/google-cloud-fonts
+	sudo unzip -q /tmp/googlefonts.zip -d $FONTDIR/google-cloud-fonts
+	rm /tmp/googlefonts.zip
+	## Go font
+	sudo mkdir -p $FONTDIR/gofont
+	git clone --depth=1 https://go.googlesource.com/image /tmp/gofont
+	sudo cp /tmp/gofont/font/gofont/ttfs/*.ttf $FONTDIR/gofont
+	rm -Rf /tmp/gofont
+	## FiraCode font
+	sudo mkdir -p $FONTDIR/firacode
+	git clone --depth=1 https://github.com/tonsky/FiraCode.git /tmp/firacode
+	sudo cp /tmp/firacode/distr/ttf/*.ttf $FONTDIR/firacode
+	rm -Rf /tmp/firacode
+	## Flush the Font Cache
+	sudo fc-cache -f
+fi
 
 # Install VS Code (see https://code.visualstudio.com/Download for new version/sha values)
 VSCODE_VERSION=1.28
