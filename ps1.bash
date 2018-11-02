@@ -1,3 +1,6 @@
+U="$USER"
+[ "$USER" == "dustyisawilson" ] && U="emmaly"
+
 dwps_start_fg=0
 dwps_start_bg=0
 dwps_user_fg=82
@@ -62,7 +65,7 @@ function dwps.ps1 {
 	dwps.sep start user no
 	dwps.colorset user
 	dwps.text " "
-	dwps.text "\u"
+	dwps.text "$U"
 	dwps.colorset usersep
 	dwps.text "@"
 	dwps.colorset user
