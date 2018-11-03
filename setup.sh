@@ -90,6 +90,8 @@ grep -q "/usr/local/go/bin" ~/.profile || echo "PATH=\$PATH:/usr/local/go/bin" |
 grep -q "/usr/local/go/bin" ~/.bashrc || echo "PATH=\$PATH:/usr/local/go/bin" | tee -a ~/.bashrc
 grep -q "~/go/bin" ~/.profile || echo "PATH=\$PATH:~/go/bin" | tee -a ~/.profile
 grep -q "~/go/bin" ~/.bashrc || echo "PATH=\$PATH:~/go/bin" | tee -a ~/.bashrc
+grep -q "GO111MODULE" ~/.profile || echo "export GO111MODULE=on" | tee -a ~/.profile
+grep -q "GO111MODULE" ~/.bashrc || echo "export GO111MODULE=on" | tee -a ~/.bashrc
 
 # Setup Fonts
 FONTDIR=/usr/share/fonts/emmalyfonts
