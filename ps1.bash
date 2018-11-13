@@ -1,5 +1,5 @@
 U=$USER
-[[ "$U" = dustyisawilson || "$U" = emmaly* ]] && U=Emmaly
+[[ "$U" = dustyisawilson || "$U" = emmaly* ]] && U="Emmaly Wilson"
 
 dwps_start_fg=0
 dwps_start_bg=0
