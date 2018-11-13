@@ -1,5 +1,5 @@
 U=$USER
-[ "$U" == dustyisawilson -o "$U" = emmaly* ] && U=Emmaly
+[[ "$U" = dustyisawilson || "$U" = emmaly* ]] && U=Emmaly
 
 dwps_start_fg=0
 dwps_start_bg=0
@@ -66,10 +66,6 @@ function dwps.ps1 {
 	dwps.colorset user
 	dwps.text " "
 	dwps.text "$U"
-	dwps.colorset usersep
-	dwps.text "@"
-	dwps.colorset user
-	dwps.text "\h"
 	dwps.sep user dir
 	dwps.colorset dir
 	dwps.dir
