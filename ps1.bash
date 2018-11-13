@@ -1,5 +1,5 @@
-U="$USER"
-[ "$USER" == "dustyisawilson" ] && U="emmaly"
+U=$USER
+[ "$U" == dustyisawilson -o "$U" = emmaly* ] && U=Emmaly
 
 dwps_start_fg=0
 dwps_start_bg=0
