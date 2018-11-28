@@ -10,6 +10,7 @@ sudo apt-get install -y --no-install-recommends \
 			ca-certificates \
 			curl \
 			dirmngr \
+			dnsutils \
 			fakeroot \
 			gnupg \
 			konsole \
