@@ -19,6 +19,7 @@ sudo apt-get install -y --no-install-recommends \
 			powerline \
 			python-pip \
 			wget \
+			whois \
 			unzip
 
 # Install Remmina
