@@ -57,6 +57,7 @@ if [ ! -f /etc/apt/sources.list.d/google-cloud-sdk.list ]; then
 fi
 dpkg -l google-cloud-sdk 2>/dev/null | grep ^ii >/dev/null || sudo apt-get install --no-install-recommends -y google-cloud-sdk
 dpkg -l kubectl 2>/dev/null | grep ^ii >/dev/null || sudo apt-get install --no-install-recommends -y kubectl
+grep -q "kubectl completion bash" ~/.bashrc || echo 'source <(kubectl completion bash)' | tee -a ~/.bashrc
 
 # Sensible Bash
 [ ! -f ~/.sensible.bash ] && curl https://raw.githubusercontent.com/mrzool/bash-sensible/master/sensible.bash -o ~/.sensible.bash
