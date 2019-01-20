@@ -13,15 +13,25 @@ sudo apt-get install -y --no-install-recommends \
 			dnsutils \
 			fakeroot \
 			gnupg \
+			gnupg2 \
 			konsole \
 			lsb-release \
 			man-db \
 			nano \
 			powerline \
 			python-pip \
+			software-properties-common \
 			wget \
 			whois \
 			unzip
+
+# Install Docker GPG Key, Repository, Package
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+sudo apt-get update
+sudo apt-get install -y --no-install-recommends \
+			 docker-ce
+sudo addgroup $USER docker
 
 # Install Remmina
 if [ "stretch" == "$(lsb_release -cs)" ]; then
