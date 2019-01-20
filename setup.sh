@@ -73,6 +73,10 @@ grep -q "kubectl completion bash" ~/.bashrc || echo 'source <(kubectl completion
 sudo curl -Lo /usr/local/bin/minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo chmod +x /usr/local/bin/minikube
 
+# dind-cluster install
+sudo curl -Lo /usr/local/bin/dind-cluster-v1.13 https://github.com/kubernetes-sigs/kubeadm-dind-cluster/releases/download/v0.1.0/dind-cluster-v1.13.sh
+sudo chmod +x /usr/local/bin/dind-cluster-v1.13
+
 # Sensible Bash
 [ ! -f ~/.sensible.bash ] && curl https://raw.githubusercontent.com/mrzool/bash-sensible/master/sensible.bash -o ~/.sensible.bash
 [ -f ~/.sensible.bash ] && grep -q "~/.sensible.bash" ~/.bashrc || \
