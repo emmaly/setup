@@ -142,6 +142,7 @@ function dwps.git.test {
 }
 
 function dwps.git {
+	dwps.colorset git
 	local GIT_PS1="$(__git_ps1)"
 	GIT_PS1="${GIT_PS1# }"
 	GIT_PS1="${GIT_PS1//\(/}"
