@@ -1,5 +1,5 @@
 U=$USER
-[[ "$U" = dustyisawilson || "$U" = emmaly* ]] && U="Emmaly Wilson"
+[[ "$U" = dustyisawilson || "$U" = emmaly* ]] && U="Emmaly"
 
 dwps_start_fg=0
 dwps_start_bg=0
@@ -8,14 +8,14 @@ dwps_user_bg=235
 dwps_usersep_fg=2
 dwps_usersep_bg=${dwps_user_bg}
 dwps_dir_fg=190
-dwps_dir_bg=19
+dwps_dir_bg=54
 dwps_dirsep_fg=99
 dwps_dirsep_fg=9
 dwps_dirsep_bg=${dwps_dir_bg}
 dwps_dirlock_fg=9
 dwps_dirlock_bg=${dwps_dir_bg}
 dwps_git_fg=231
-dwps_git_bg=28
+dwps_git_bg=23
 dwps_gitsep_fg=9
 dwps_gitsep_bg=${dwps_git_bg}
 dwps_load_fg=82
