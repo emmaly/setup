@@ -69,6 +69,10 @@ dpkg -l google-cloud-sdk 2>/dev/null | grep ^ii >/dev/null || sudo apt-get insta
 dpkg -l kubectl 2>/dev/null | grep ^ii >/dev/null || sudo apt-get install --no-install-recommends -y kubectl
 grep -q "kubectl completion bash" ~/.bashrc || echo 'source <(kubectl completion bash)' | tee -a ~/.bashrc
 
+# cloud_sql_proxy install
+sudo curl -Lo /usr/local/bin/cloud_sql_proxy https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64
+sudo chmod +x /usr/local/bin/cloud_sql_proxy
+
 # Minikube install
 sudo curl -Lo /usr/local/bin/minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo chmod +x /usr/local/bin/minikube
