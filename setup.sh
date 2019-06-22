@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Versions
+NODE_REPO_VER=12.x # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
+
 # General Updates
 echo -e "\nUpdating package cache..."
 sudo apt-get update
@@ -160,6 +163,38 @@ else
 	grep -q "~/go/bin" ~/.bashrc || echo "PATH=\$PATH:~/go/bin" | tee -a ~/.bashrc
 	#grep -q "GO111MODULE" ~/.profile || echo "export GO111MODULE=on" | tee -a ~/.profile
 	#grep -q "GO111MODULE" ~/.bashrc || echo "export GO111MODULE=on" | tee -a ~/.bashrc
+fi
+
+# node.js
+echo -e "\n[NODE.JS ${NODE_REPO_VER}]"
+if which node; then
+	echo "node.js already installed, skipping."
+else
+	if [ -z "$NODE_REPO_VER" ]; then
+		echo "*************** NODE_REPO_VER IS EMPTY WHICH IS BAD.  Fix this at emmaly/setup/setup.sh"
+		exit 1
+	fi
+	wget -q -O - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add - \
+		&& sudo sh -c "echo 'deb https://deb.nodesource.com/node_${NODE_REPO_VER} $(lsb_release -c -s) main' > /etc/apt/sources.list.d/nodesource.list" \
+		&& sudo sh -c "echo 'deb-src https://deb.nodesource.com/node_${NODE_REPO_VER} $(lsb_release -c -s) main' >> /etc/apt/sources.list.d/nodesource.list" \
+		&& sudo apt-get update \
+		&& sudo apt-get install -y nodejs --no-install-recommends
+fi
+
+# Install packages via yarn
+echo -e "\n[YARN]"
+if which yarn; then
+	echo "yarn already installed, skipping."
+else
+	curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - \
+		&& sudo sh -c 'echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list' \
+		&& sudo apt-get update \
+		&& sudo apt-get install -y yarn --no-install-recommends
+	yarn global add bower
+	yarn global add localtunnel
+	yarn global add polymer-cli
+	yarn global add firebase-tools
+	yarn global add webpack webpack-cli
 fi
 
 # Setup Fonts
