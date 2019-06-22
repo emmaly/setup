@@ -1,10 +1,13 @@
 #!/bin/bash
 
 # General Updates
+echo -e "\nUpdating package cache..."
 sudo apt-get update
+echo -e "\nUpgrading packages..."
 sudo apt-get dist-upgrade -y
 
 # Prereqs
+echo -e "\nInstalling some packages..."
 sudo apt-get install -y --no-install-recommends \
 			apt-transport-https \
 			ca-certificates \
@@ -26,46 +29,67 @@ sudo apt-get install -y --no-install-recommends \
 			unzip
 
 # Install Docker GPG Key, Repository, Package
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-sudo apt-get update
-sudo apt-get install -y --no-install-recommends \
-			 docker-ce
-sudo addgroup $USER docker
+echo -e "\n[DOCKER]"
+if which docker >/dev/null; then
+	echo "Docker already installed, skipping."
+else
+	curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+	sudo apt-get update
+	sudo apt-get install -y --no-install-recommends \
+				 docker-ce
+	sudo addgroup $USER docker
+fi
 
 # Install Remmina
-if [ "stretch" == "$(lsb_release -cs)" ]; then
-	echo "deb http://ftp.debian.org/debian $(lsb_release -cs)-backports main" | sudo tee /etc/apt/sources.list.d/stretch-backports.list
-	sudo apt-get update
-	sudo apt-get install -y --no-install-recommends -t $(lsb_release -cs)-backports \
-			remmina \
-			remmina-plugin-rdp \
-			remmina-plugin-secret \
-			remmina-plugin-spice \
-			remmina-plugin-vnc \
-			remmina-plugin-xdmcp
+echo -e "\n[REMMINA]"
+if which remmina >/dev/null; then
+	echo "Remmina already installed, skipping."
 else
-	sudo apt-get install -y --no-install-recommends \
-			remmina \
-			remmina-plugin-rdp \
-			remmina-plugin-secret \
-			remmina-plugin-spice \
-			remmina-plugin-vnc \
-			remmina-plugin-xdmcp
+	if [ "stretch" == "$(lsb_release -cs)" ]; then
+		echo "deb http://ftp.debian.org/debian $(lsb_release -cs)-backports main" | sudo tee /etc/apt/sources.list.d/stretch-backports.list
+		sudo apt-get update
+		sudo apt-get install -y --no-install-recommends -t $(lsb_release -cs)-backports \
+				remmina \
+				remmina-plugin-rdp \
+				remmina-plugin-secret \
+				remmina-plugin-spice \
+				remmina-plugin-vnc \
+				remmina-plugin-xdmcp
+	else
+		sudo apt-get install -y --no-install-recommends \
+				remmina \
+				remmina-plugin-rdp \
+				remmina-plugin-secret \
+				remmina-plugin-spice \
+				remmina-plugin-vnc \
+				remmina-plugin-xdmcp
+	fi
 fi
 
 # Konsole config
-mkdir -p ~/.local/share/konsole ~/.config
-[ ! -f ~/.local/share/konsole/Emmaly.profile ] && cp Emmaly.profile ~/.local/share/konsole/Emmaly.profile
-[ ! -f ~/.config/konsolerc ] && cp konsolerc -o ~/.config/konsolerc
+echo -e "\n[KONSOLE]"
+if [ -f ~/.local/share/konsole/Emmaly.profile ]; then
+	echo "Emmaly's Konsole config already installed, skipping."
+else
+	mkdir -p ~/.local/share/konsole ~/.config
+	cp Emmaly.profile ~/.local/share/konsole/Emmaly.profile
+	[ ! -f ~/.config/konsolerc ] && cp konsolerc -o ~/.config/konsolerc
+fi
 
 # Google Chrome install
-wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - \
-	&& sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-	&& sudo apt-get update \
-	&& sudo apt-get install -y google-chrome-stable --no-install-recommends
+echo -e "\n[GOOGLE CHROME]"
+if which google-chrome >/dev/null; then
+	echo "Google Chrome already installed, skipping."
+else
+	wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - \
+		&& sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list' \
+		&& sudo apt-get update \
+		&& sudo apt-get install -y google-chrome-stable --no-install-recommends
+fi
 
 # Google Cloud SDK install
+echo -e "\n[GOOGLE CLOUD SDK]"
 if [ ! -f /etc/apt/sources.list.d/google-cloud-sdk.list ]; then
 	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
 	echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list >/dev/null && \
@@ -76,84 +100,117 @@ dpkg -l kubectl 2>/dev/null | grep ^ii >/dev/null || sudo apt-get install --no-i
 grep -q "kubectl completion bash" ~/.bashrc || echo 'source <(kubectl completion bash)' | tee -a ~/.bashrc
 
 # cloud_sql_proxy install
+echo -e "\n[CLOUD_SQL_PROXY]"
+echo "Installing/updating cloud_sql_proxy."
 sudo curl -Lo /usr/local/bin/cloud_sql_proxy https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64
 sudo chmod +x /usr/local/bin/cloud_sql_proxy
 
 # Minikube install
+echo -e "\n[MINIKUBE]"
+echo "Installing/updating minikube."
 sudo curl -Lo /usr/local/bin/minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo chmod +x /usr/local/bin/minikube
 
 # dind-cluster install
+echo -e "\n[DIND-CLUSTER]"
+echo "Installing/updating dind-cluster."
 sudo curl -Lo /usr/local/bin/dind-cluster-v1.13 https://github.com/kubernetes-sigs/kubeadm-dind-cluster/releases/download/v0.1.0/dind-cluster-v1.13.sh
 sudo chmod +x /usr/local/bin/dind-cluster-v1.13
 
 # Sensible Bash
+echo -e "\n[SENSIBLE BASH]"
 [ ! -f ~/.sensible.bash ] && curl https://raw.githubusercontent.com/mrzool/bash-sensible/master/sensible.bash -o ~/.sensible.bash
 [ -f ~/.sensible.bash ] && grep -q "~/.sensible.bash" ~/.bashrc || \
 echo "source ~/.sensible.bash" | tee -a ~/.bashrc
 
 # Powerline config
+#echo -e "\n[POWERLINE]"
 #grep -q "powerline-daemon -q" ~/.bashrc || echo "powerline-daemon -q" | tee -a ~/.bashrc
 #grep -q "/powerline.sh" ~/.bashrc || echo "source /usr/share/powerline/bindings/bash/powerline.sh" | tee -a ~/.bashrc
 
 # Custom PS1 prompt
+echo -e "\n[PS1 PROMPT]"
 [ ! -f ~/.ps1.bash ] && cp ps1.bash ~/.ps1.bash
 grep -q "~/.ps1.bash" ~/.bashrc || echo "source ~/.ps1.bash" | tee -a ~/.bashrc
 
 # Go install
+echo -e "\n[GO]"
+echo "Installing/updating Go, if needed."
 GO_VERSION=$(gsutil ls gs://golang/ | grep -Ev '(rc|beta|asc|sha256)' | grep linux-amd64.tar.gz | cut -d/ -f4 | sed 's/^go//' | sed 's/\.linux-amd64\.tar\.gz$//' | sort --version-sort | tail -n1)
-[ -z "$GO_VERSION" ] && exit 1
-## Check if currently installed version matches
-KEEP_GO=
-[ -f "/usr/local/go/bin/go" ] && /usr/local/go/bin/go version | grep -q " go$GO_VERSION " && KEEP_GO=1
-## If we're not keeping current version (or it is absent), replace and/or fetch and install
-if [ -z "$KEEP_GO" ]; then
-	### Remove old Go if exists
-	sudo rm -Rf /usr/local/go
-	### Fetch new Go, install, and cleanup
-	gsutil cp gs://golang/go${GO_VERSION}.linux-amd64.tar.gz /tmp/go.tgz && \
-	sudo tar -C /usr/local -zxf /tmp/go.tgz && \
-	rm /tmp/go.tgz
+if [ -z "$GO_VERSION" ]; then
+	echo "********************* GO_VERSION IS EMPTY, WHICH IS BAD.  Perhaps there's an error in Google Storage, or on the Internet connection?  Review it in emmaly/setup/setup.sh"
+else
+	## Check if currently installed version matches
+	KEEP_GO=
+	[ -f "/usr/local/go/bin/go" ] && /usr/local/go/bin/go version | grep -q " go$GO_VERSION " && KEEP_GO=1
+	## If we're not keeping current version (or it is absent), replace and/or fetch and install
+	if [ -z "$KEEP_GO" ]; then
+		### Remove old Go if exists
+		sudo rm -Rf /usr/local/go
+		### Fetch new Go, install, and cleanup
+		gsutil cp gs://golang/go${GO_VERSION}.linux-amd64.tar.gz /tmp/go.tgz && \
+		sudo tar -C /usr/local -zxf /tmp/go.tgz && \
+		rm /tmp/go.tgz
+	fi
+	## Setup Go
+	mkdir -p ~/go/{src,bin}
+	grep -q "/usr/local/go/bin" ~/.profile || echo "PATH=\$PATH:/usr/local/go/bin" | tee -a ~/.profile
+	grep -q "/usr/local/go/bin" ~/.bashrc || echo "PATH=\$PATH:/usr/local/go/bin" | tee -a ~/.bashrc
+	grep -q "~/go/bin" ~/.profile || echo "PATH=\$PATH:~/go/bin" | tee -a ~/.profile
+	grep -q "~/go/bin" ~/.bashrc || echo "PATH=\$PATH:~/go/bin" | tee -a ~/.bashrc
+	#grep -q "GO111MODULE" ~/.profile || echo "export GO111MODULE=on" | tee -a ~/.profile
+	#grep -q "GO111MODULE" ~/.bashrc || echo "export GO111MODULE=on" | tee -a ~/.bashrc
 fi
-## Setup Go
-mkdir -p ~/go/{src,bin}
-grep -q "/usr/local/go/bin" ~/.profile || echo "PATH=\$PATH:/usr/local/go/bin" | tee -a ~/.profile
-grep -q "/usr/local/go/bin" ~/.bashrc || echo "PATH=\$PATH:/usr/local/go/bin" | tee -a ~/.bashrc
-grep -q "~/go/bin" ~/.profile || echo "PATH=\$PATH:~/go/bin" | tee -a ~/.profile
-grep -q "~/go/bin" ~/.bashrc || echo "PATH=\$PATH:~/go/bin" | tee -a ~/.bashrc
-#grep -q "GO111MODULE" ~/.profile || echo "export GO111MODULE=on" | tee -a ~/.profile
-#grep -q "GO111MODULE" ~/.bashrc || echo "export GO111MODULE=on" | tee -a ~/.bashrc
 
 # Setup Fonts
+echo -e "\n[FONTS]"
 FONTDIR=/usr/share/fonts/emmalyfonts
-if [ ! -d "$FONTDIR" ]; then
-	sudo mkdir -p $FONTDIR
-	## Google Cloud Fonts
+## Google Cloud Fonts
+if [ -d "$FONTDIR/google-cloud-fonts" ]; then
+	echo "Google Cloud Fonts already installed, skipping."
+else
 	[ ! -f /tmp/googlefonts.zip ] && curl -L https://github.com/google/fonts/archive/master.zip > /tmp/googlefonts.zip
 	sudo mkdir -p $FONTDIR/google-cloud-fonts
 	sudo unzip -q /tmp/googlefonts.zip -d $FONTDIR/google-cloud-fonts
 	rm /tmp/googlefonts.zip
-	## Go font
+	FONTS_INSTALLED=1
+fi
+## Go font
+if [ -d "$FONTDIR/gofont" ]; then
+	echo "Go Font already installed, skipping."
+else
 	sudo mkdir -p $FONTDIR/gofont
 	git clone --depth=1 https://go.googlesource.com/image /tmp/gofont
 	sudo cp /tmp/gofont/font/gofont/ttfs/*.ttf $FONTDIR/gofont
 	rm -Rf /tmp/gofont
-	## FiraCode font
+	FONTS_INSTALLED=1
+fi
+## FiraCode font
+if [ -d "$FONTDIR/firacode" ]; then
+	echo "FiraCode Font already installed, skipping."
+else
 	sudo mkdir -p $FONTDIR/firacode
 	git clone --depth=1 https://github.com/tonsky/FiraCode.git /tmp/firacode
 	sudo cp /tmp/firacode/distr/ttf/*.ttf $FONTDIR/firacode
 	rm -Rf /tmp/firacode
-	## Flush the Font Cache
+	FONTS_INSTALLED=1
+fi
+## Flush the Font Cache
+if [ ! -z "$FONTS_INSTALLED" ]; then
 	sudo fc-cache -f
 fi
 
 # Install VS Code
-## Install Microsoft apt repository key
-eval $(apt-config shell APT_TRUSTED_PARTS Dir::Etc::trustedparts/d)
-CODE_TRUSTED_PART=${APT_TRUSTED_PARTS}microsoft.gpg
-if [ ! -f $CODE_TRUSTED_PART ]; then
-	### Sourced from https://packages.microsoft.com/keys/microsoft.asc
-	echo "-----BEGIN PGP PUBLIC KEY BLOCK-----
+echo -e "\n[VS Code]"
+if which code >/dev/null; then
+	echo "VS Code already installed, skipping."
+else
+	## Install Microsoft apt repository key
+	eval $(apt-config shell APT_TRUSTED_PARTS Dir::Etc::trustedparts/d)
+	CODE_TRUSTED_PART=${APT_TRUSTED_PARTS}microsoft.gpg
+	if [ ! -f $CODE_TRUSTED_PART ]; then
+		### Sourced from https://packages.microsoft.com/keys/microsoft.asc
+		echo "-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.7 (GNU/Linux)
 
 mQENBFYxWIwBCADAKoZhZlJxGNGWzqV+1OG1xiQeoowKhssGAKvd+buXCGISZJwT
@@ -173,17 +230,18 @@ NdCFTW7wY0Fb1fWJ+/KTsC4=
 =J6gs
 -----END PGP PUBLIC KEY BLOCK-----
 " | gpg --dearmor | sudo tee $CODE_TRUSTED_PART
+	fi
+	## Install repository source list
+	eval $(apt-config shell APT_SOURCE_PARTS Dir::Etc::sourceparts/d)
+	CODE_SOURCE_PART=${APT_SOURCE_PARTS}vscode.list
+	WRITE_SOURCE=0
+	if [ ! -f $CODE_SOURCE_PART ]; then
+		### Write source list if it does not exist
+		WRITE_SOURCE=1
+	elif grep -q "# disabled on upgrade to" $CODE_SOURCE_PART; then
+		### Write source list if it was disabled by OS upgrade
+		WRITE_SOURCE=1
+	fi
+	[ "$WRITE_SOURCE" -eq "1" ] && echo -e "### THIS FILE IS AUTOMATICALLY CONFIGURED ###\n# You may comment out this entry, but any other modifications may be lost.\ndeb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" | sudo tee $CODE_SOURCE_PART
+	sudo apt update && sudo apt install -y --no-install-recommends code
 fi
-## Install repository source list
-eval $(apt-config shell APT_SOURCE_PARTS Dir::Etc::sourceparts/d)
-CODE_SOURCE_PART=${APT_SOURCE_PARTS}vscode.list
-WRITE_SOURCE=0
-if [ ! -f $CODE_SOURCE_PART ]; then
-	### Write source list if it does not exist
-	WRITE_SOURCE=1
-elif grep -q "# disabled on upgrade to" $CODE_SOURCE_PART; then
-	### Write source list if it was disabled by OS upgrade
-	WRITE_SOURCE=1
-fi
-[ "$WRITE_SOURCE" -eq "1" ] && echo -e "### THIS FILE IS AUTOMATICALLY CONFIGURED ###\n# You may comment out this entry, but any other modifications may be lost.\ndeb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" | sudo tee $CODE_SOURCE_PART
-sudo apt update && sudo apt install -y --no-install-recommends code
