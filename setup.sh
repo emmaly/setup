@@ -3,6 +3,15 @@
 # Versions
 NODE_REPO_VER=12.x # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
 
+# Create keys, if needed
+echo -e "\n[SSH KEYS]"
+if [ -f ~/.ssh/id_ed25519 ]; then
+	echo -e "Key already exists, skipping."
+else
+	echo -e "Generating new key pair..."
+	ssh-keygen -t ed25519 -C "$(date +"$HOSTNAME $USER %Y%m%d")" -f ~/.ssh/id_ed25519
+fi
+
 # General Directories
 mkdir -p ~/code ~/.local/share ~/.config ~/.yarn/bin
 
