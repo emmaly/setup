@@ -242,6 +242,9 @@ echo -e "\n[VS Code]"
 if which code >/dev/null; then
 	echo "VS Code already installed, skipping."
 else
+	## Set VS Code preferences
+	mkdir -p ~/.config/Code/User
+	cp vscode.user.settings.json ~/.config/Code/User/settings.json
 	## Install Microsoft apt repository key
 	eval $(apt-config shell APT_TRUSTED_PARTS Dir::Etc::trustedparts/d)
 	CODE_TRUSTED_PART=${APT_TRUSTED_PARTS}microsoft.gpg
