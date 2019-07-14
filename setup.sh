@@ -3,6 +3,9 @@
 # Versions
 NODE_REPO_VER=12.x # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
 
+# General Directories
+mkdir -p ~/code ~/.local/share ~/.config ~/.yarn/bin
+
 # General Updates
 echo -e "\nUpdating package cache..."
 sudo apt-get update
