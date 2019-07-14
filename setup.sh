@@ -13,15 +13,19 @@ else
 fi
 
 # General Directories
-mkdir -p ~/code ~/.local/share ~/.config ~/.yarn/bin
+echo -e "\n[GENERAL DIRECTORIES]"
+mkdir -vp ~/code ~/.local/share ~/.config ~/.yarn/bin
 
-# General Updates
+# Packages
+echo -e "\n[PACKAGES]"
+
+## General Updates
 echo -e "\nUpdating package cache..."
 sudo apt-get update
 echo -e "\nUpgrading packages..."
 sudo apt-get dist-upgrade -y
 
-# Prereqs
+## Prereqs
 echo -e "\nInstalling some packages..."
 sudo apt-get install -y --no-install-recommends \
 			apt-transport-https \
@@ -300,6 +304,10 @@ fi
 
 # Install Signal
 echo -e "\n[SIGNAL]"
-curl -s https://updates.signal.org/desktop/apt/keys.asc | sudo apt-key add -
-echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | sudo tee /etc/apt/sources.list.d/signal.list
-sudo apt update && sudo apt install -y --no-install-recommends signal-desktop
+if which signal-desktop >/dev/null; then
+	echo "Signal already installed, skipping."
+else
+	curl -s https://updates.signal.org/desktop/apt/keys.asc | sudo apt-key add -
+	echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | sudo tee /etc/apt/sources.list.d/signal.list
+	sudo apt update && sudo apt install -y --no-install-recommends signal-desktop
+fi
