@@ -1,3 +1,3 @@
 #!/bin/bash
 
-curl https://github.com/emmaly.keys > ~/.ssh/authorized_keys >/dev/null
+curl https://github.com/emmaly.keys > ~/.ssh/authorized_keys
