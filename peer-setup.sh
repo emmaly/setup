@@ -21,3 +21,6 @@ if which crontab >/dev/null; then
 		(crontab -l | grep -v "update-authorized-keys.sh") | crontab -
 	fi
 fi
+
+[ -d ~/.ssh ] && chmod 700 ~/.ssh
+[ -f ~/.ssh/authorized_keys ] && chmod 600 ~/.ssh/authorized_keys
