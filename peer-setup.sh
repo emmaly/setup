@@ -2,6 +2,9 @@
 
 DIR=$HOME/.emmaly-setup
 
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+
 if which git >/dev/null; then
 	if [ ! -d "$DIR" ]; then
 		git clone https://github.com/emmaly/setup.git "$DIR"
