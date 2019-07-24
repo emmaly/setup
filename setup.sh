@@ -36,6 +36,7 @@ sudo apt-get install -y --no-install-recommends \
 			fakeroot \
 			gnupg \
 			gnupg2 \
+			iputils-ping \
 			konsole \
 			lsb-release \
 			man-db \
