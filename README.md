@@ -9,7 +9,7 @@ Run the usual setup via one of these:
 
 Key could be created and read via something like this:
 
-* `ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -C "${USER}@$(hostname) $(date +"$(date -u --rfc-3339=date)")" && cat ~/.ssh/id_ed25519.pub`
+* `ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -C "${USER}@$(hostname):$(date +"$(date -u --rfc-3339=date)")" && cat ~/.ssh/id_ed25519.pub`
 
 Key distribution via something like this:
 
