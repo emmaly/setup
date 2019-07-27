@@ -9,7 +9,7 @@ if [ -f ~/.ssh/id_ed25519 ]; then
 	echo -e "Key already exists, skipping."
 else
 	echo -e "Generating new key pair..."
-	ssh-keygen -t ed25519 -C "$(date +"$HOSTNAME $USER %Y%m%d")" -f ~/.ssh/id_ed25519
+	ssh-keygen -t ed25519 -C "${USER}@${HOSTNAME}:$(date +"%Y%m%d")" -f ~/.ssh/id_ed25519
 fi
 
 # General Directories
@@ -322,4 +322,10 @@ else
 	sudo dpkg -i /tmp/keybase.deb
 	sudo apt-get install -f
 	rm /tmp/keybase.deb
+fi
+
+# Run peer-setup
+if [ -x ./peer-setup.sh ]; then
+	echo -e "\n[PEER-SETUP]"
+	./peer-setup.sh
 fi
