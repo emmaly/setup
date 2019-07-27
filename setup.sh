@@ -2,6 +2,7 @@
 
 # Versions
 NODE_REPO_VER=12.x # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
+#FIRACODE_COMMIT=3557a00
 
 # Create keys, if needed
 echo -e "\n[SSH KEYS]"
@@ -244,7 +245,12 @@ if [ -d "$FONTDIR/firacode" ]; then
 	echo "FiraCode Font already installed, skipping."
 else
 	sudo mkdir -p $FONTDIR/firacode
-	git clone --depth=1 https://github.com/tonsky/FiraCode.git /tmp/firacode
+	if [ -z $FIRACODE_COMMIT ]; then
+		git clone --depth=1 https://github.com/tonsky/FiraCode.git /tmp/firacode
+	else
+		git clone https://github.com/tonsky/FiraCode.git /tmp/firacode
+		git -C /tmp/firacode checkout $FIRACODE_COMMIT
+	fi
 	sudo cp /tmp/firacode/distr/ttf/*.ttf $FONTDIR/firacode
 	rm -Rf /tmp/firacode
 	FONTS_INSTALLED=1
@@ -320,7 +326,7 @@ if which keybase >/dev/null; then
 else
 	wget -O/tmp/keybase.deb https://prerelease.keybase.io/keybase_amd64.deb && \
 	sudo dpkg -i /tmp/keybase.deb
-	sudo apt-get install -f
+	sudo apt-get install -f -y
 	rm /tmp/keybase.deb
 fi
 
