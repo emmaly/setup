@@ -38,6 +38,7 @@ sudo apt-get install -y --no-install-recommends \
 			gnupg \
 			gnupg2 \
 			iputils-ping \
+			keychain \
 			konsole \
 			lsb-release \
 			man-db \
@@ -48,6 +49,10 @@ sudo apt-get install -y --no-install-recommends \
 			wget \
 			whois \
 			unzip
+
+# Configure Keychain
+echo -e "\n[KEYCHAIN]"
+grep keychain ~/.bashrc | grep eval >/dev/null || echo 'eval $(keychain --eval id_ed25519)' >> ~/.bashrc
 
 # Install Docker GPG Key, Repository, Package
 echo -e "\n[DOCKER]"
