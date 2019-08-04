@@ -270,6 +270,18 @@ else
 	rm /tmp/operator-mono.zip
 	FONTS_INSTALLED=1
 fi
+## Victor Mono
+if [ -d "$FONTDIR/victor-mono" ]; then
+	echo "Victor Mono already installed, skipping."
+else
+	sudo mkdir -p $FONTDIR/victor-mono
+	curl -Lo /tmp/victor-mono.zip https://github.com/rubjo/victor-mono/raw/master/public/VictorMonoAll.zip
+	mkdir /tmp/victor-mono
+	unzip -q /tmp/victor-mono.zip -d /tmp/victor-mono
+	sudo cp /tmp/victor-mono/OTF/*.otf $FONTDIR/victor-mono/
+	rm -R /tmp/victor-mono /tmp/victor-mono.zip
+	FONTS_INSTALLED=1
+fi
 ## Flush the Font Cache
 if [ ! -z "$FONTS_INSTALLED" ]; then
 	sudo fc-cache -f
