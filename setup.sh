@@ -260,6 +260,16 @@ else
 	rm -Rf /tmp/firacode
 	FONTS_INSTALLED=1
 fi
+## Operator Mono
+if [ -d "$FONTDIR/operator-mono" ]; then
+	echo "Operator Mono already installed, skipping."
+else
+	sudo mkdir -p $FONTDIR/operator-mono
+	curl -Lo /tmp/operator-mono.zip https://www.cufonfonts.com/download/font/operator-mono
+	sudo unzip -q /tmp/operator-mono.zip -d $FONTDIR/operator-mono
+	rm /tmp/operator-mono.zip
+	FONTS_INSTALLED=1
+fi
 ## Flush the Font Cache
 if [ ! -z "$FONTS_INSTALLED" ]; then
 	sudo fc-cache -f
