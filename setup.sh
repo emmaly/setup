@@ -40,6 +40,7 @@ sudo apt-get install -y --no-install-recommends \
 			iputils-ping \
 			keychain \
 			konsole \
+			libsecret-1-dev \
 			lsb-release \
 			man-db \
 			nano \
@@ -220,6 +221,7 @@ else
 	yarn global add polymer-cli
 	yarn global add firebase-tools
 	yarn global add webpack webpack-cli
+	yarn global add twilio-cli
 fi
 
 # Setup Fonts
