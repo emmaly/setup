@@ -35,6 +35,7 @@ sudo apt-get install -y --no-install-recommends \
 			dirmngr \
 			dnsutils \
 			fakeroot \
+			gnome-keyring \
 			gnupg \
 			gnupg2 \
 			iputils-ping \
