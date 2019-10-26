@@ -340,6 +340,30 @@ NdCFTW7wY0Fb1fWJ+/KTsC4=
 	sudo apt update && sudo apt install -y --no-install-recommends code
 fi
 
+# Android Studio for Chrome OS
+echo -e "\n[Android Studio for Chrome OS]"
+if [ -x /opt/android-studio/bin/studio.sh ]; then
+	echo "Android Studio already installed, skipping."
+else
+	curl -Lo /tmp/android-studio.html https://developer.android.com/studio
+	AS_SHANAME=$(grep -Eo "\b[a-f0-9]+\s+android-studio-ide-\S+-cros.deb\b" /tmp/android-studio.html | head -n1)
+	AS_SHA=$(cut -d' ' -f1 <<< "$AS_SHANAME")
+	AS_NAME=$(cut -d' ' -f2 <<< "$AS_SHANAME")
+	AS_URL=$(grep -Eo "https://\S+/$AS_NAME" /tmp/android-studio.html | head -n1)
+	if [ -z "$AS_URL" ]; then
+		echo "Unable to locate installer URL, failed!"
+	else
+		rm /tmp/android-studio.deb 2>/dev/null
+		curl -Lo /tmp/android-studio.deb "$AS_URL"
+		if [ -f /tmp/android-studio.deb ]; then
+			sudo apt install /tmp/android-studio.deb
+			rm /tmp/android-studio.deb
+		else
+			echo "Android Studio failed to download, failed!"
+		fi
+	fi
+fi
+
 # Install Signal
 #echo -e "\n[SIGNAL]"
 #if which signal-desktop >/dev/null; then
