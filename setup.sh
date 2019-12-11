@@ -20,6 +20,10 @@ mkdir -vp ~/code ~/.local/share ~/.config ~/.yarn/bin
 # Packages
 echo -e "\n[PACKAGES]"
 
+# Add unstable (for access to wireguard)
+echo "deb http://deb.debian.org/debian/ unstable main" | sudo tee /etc/apt/sources.list.d/unstable.list
+echo -e "Package: *\nPin: release a=unstable\nPin-Priority: 90" | sudo tee /etc/apt/preferences.d/limit-unstable
+
 ## General Updates
 echo -e "\nUpdating package cache..."
 sudo apt-get update
@@ -50,6 +54,7 @@ sudo apt-get install -y --no-install-recommends \
 			software-properties-common \
 			wget \
 			whois \
+			wireguard \
 			unzip
 
 # Configure Keychain
@@ -375,15 +380,15 @@ fi
 #fi
 
 # Install Keybase
-echo -e "\n[KEYBASE]"
-if which keybase >/dev/null; then
-	echo "Keybase already installed, skipping."
-else
-	wget -O/tmp/keybase.deb https://prerelease.keybase.io/keybase_amd64.deb && \
-	sudo dpkg -i /tmp/keybase.deb
-	sudo apt-get install -f -y
-	rm /tmp/keybase.deb
-fi
+#echo -e "\n[KEYBASE]"
+#if which keybase >/dev/null; then
+#	echo "Keybase already installed, skipping."
+#else
+#	wget -O/tmp/keybase.deb https://prerelease.keybase.io/keybase_amd64.deb && \
+#	sudo dpkg -i /tmp/keybase.deb
+#	sudo apt-get install -f -y
+#	rm /tmp/keybase.deb
+#fi
 
 # Run peer-setup
 if [ -x ./peer-setup.sh ]; then
