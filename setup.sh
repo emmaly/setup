@@ -54,7 +54,6 @@ sudo apt-get install -y --no-install-recommends \
 			software-properties-common \
 			wget \
 			whois \
-			wireguard \
 			unzip
 
 # Configure Keychain
