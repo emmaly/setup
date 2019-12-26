@@ -44,6 +44,7 @@ sudo apt-get install -y --no-install-recommends \
 			libsecret-1-dev \
 			lsb-release \
 			man-db \
+			mysql-client \
 			mysql-workbench \
 			nano \
 			powerline \
