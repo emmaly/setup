@@ -226,6 +226,7 @@ else
 	yarn global add webpack webpack-cli
 	yarn global add twilio-cli
 	yarn global add @angular/cli
+	yarn global add @vue/cli
 fi
 
 # Setup Fonts
