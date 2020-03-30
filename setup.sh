@@ -113,7 +113,7 @@ if [ -f ~/.local/share/konsole/Emmaly.profile ]; then
 else
 	mkdir -p ~/.local/share/konsole ~/.config
 	cp Emmaly.profile ~/.local/share/konsole/Emmaly.profile
-	[ ! -f ~/.config/konsolerc ] && cp konsolerc -o ~/.config/konsolerc
+	[ ! -f ~/.config/konsolerc ] && cp konsolerc ~/.config/konsolerc
 fi
 
 # Google Chrome install
