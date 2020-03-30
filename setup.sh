@@ -8,6 +8,7 @@ NODE_REPO_VER=12.x # https://github.com/nodesource/distributions/blob/master/REA
 DISTRO_NAME="$(lsb_release -is | tr -s 'A-Z' 'a-z')"
 DISTRO_VER="$(lsb_release -rs)"
 DISTRO_CODENAME="$(lsb_release -cs)"
+IS_WSL="$(uname -r | grep -qi '\-microsoftz-' && echo 1)" # either 1 or empty
 
 # Executable Paths
 SSHKEYGEN="$(which ssh-keygen 2>/dev/null || which ssh-keygen.exe 2>/dev/null)"
@@ -304,7 +305,9 @@ fi
 
 # Install VS Code
 echo -e "\n[VS Code]"
-if which code >/dev/null; then
+if [ ! -z "$IS_WSL" ]; then
+	echo "VS Code should not be installed in WSL, skipping."
+elif which code >/dev/null; then
 	echo "VS Code already installed, skipping."
 else
 	## Set VS Code preferences
@@ -353,7 +356,9 @@ fi
 
 # Android Studio for Chrome OS
 echo -e "\n[Android Studio for Chrome OS]"
-if [ -x /opt/android-studio/bin/studio.sh ]; then
+if [ ! -z "$IS_WSL" ]; then
+	echo "Android Studio for Chrome OS should not be installed in WSL, skipping."
+elif [ -x /opt/android-studio/bin/studio.sh ]; then
 	echo "Android Studio already installed, skipping."
 else
 	curl -Lo /tmp/android-studio.html https://developer.android.com/studio
