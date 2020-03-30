@@ -4,13 +4,21 @@
 NODE_REPO_VER=12.x # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
 #FIRACODE_COMMIT=3557a00
 
+# Distro
+DISTRO_NAME="$(lsb_release -is | tr -s 'A-Z' 'a-z')"
+DISTRO_VER="$(lsb_release -rs)"
+DISTRO_CODENAME="$(lsb_release -cs)"
+
+# Executable Paths
+SSHKEYGEN="$(which ssh-keygen 2>/dev/null || which ssh-keygen.exe 2>/dev/null)"
+
 # Create keys, if needed
 echo -e "\n[SSH KEYS]"
 if [ -f ~/.ssh/id_ed25519 ]; then
 	echo -e "Key already exists, skipping."
 else
 	echo -e "Generating new key pair..."
-	ssh-keygen -t ed25519 -C "${USER}@${HOSTNAME}:$(date +"%Y%m%d")" -f ~/.ssh/id_ed25519
+	$SSHKEYGEN -t ed25519 -C "${USER}@${HOSTNAME}:$(date +"%Y%m%d")" -f ~/.ssh/id_ed25519
 fi
 
 # General Directories
@@ -63,8 +71,8 @@ echo -e "\n[DOCKER]"
 if which docker >/dev/null; then
 	echo "Docker already installed, skipping."
 else
-	curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+	curl -fsSL https://download.docker.com/linux/$DISTRO_NAME/gpg | sudo apt-key add -
+	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$DISTRO_NAME $DISTRO_CODENAME stable"
 	sudo apt-get update
 	sudo apt-get install -y --no-install-recommends \
 				 docker-ce
@@ -76,10 +84,10 @@ echo -e "\n[REMMINA]"
 if which remmina >/dev/null; then
 	echo "Remmina already installed, skipping."
 else
-	if [ "stretch" == "$(lsb_release -cs)" ]; then
-		echo "deb http://ftp.debian.org/debian $(lsb_release -cs)-backports main" | sudo tee /etc/apt/sources.list.d/stretch-backports.list
+	if [ "stretch" == "$DISTRO_CODENAME" ]; then
+		echo "deb http://ftp.debian.org/debian $DISTRO_CODENAME-backports main" | sudo tee /etc/apt/sources.list.d/stretch-backports.list
 		sudo apt-get update
-		sudo apt-get install -y --no-install-recommends -t $(lsb_release -cs)-backports \
+		sudo apt-get install -y --no-install-recommends -t $DISTRO_CODENAME-backports \
 				remmina \
 				remmina-plugin-rdp \
 				remmina-plugin-secret \
