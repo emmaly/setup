@@ -406,3 +406,8 @@ if [ -x ./peer-setup.sh ]; then
 	echo -e "\n[PEER-SETUP]"
 	./peer-setup.sh
 fi
+
+# WSL2 Settings
+if [ ! -z "$IS_WSL" ]; then
+	grep -q "export DISPLAY" ~/.bashrc || echo 'export DISPLAY=$(awk \'/nameserver / {print $2; exit}\' /etc/resolv.conf 2>/dev/null):0' | tee -a ~/.bashrc
+fi
