@@ -10,8 +10,6 @@ DISTRO_VER="$(lsb_release -rs)"
 DISTRO_CODENAME="$(lsb_release -cs)"
 IS_WSL="$(uname -r | grep -qi '\-microsoft-' && echo 1)" # either 1 or empty
 
-if [ -z "zzz" ]; then
-
 # Executable Paths
 SSHKEYGEN="$(which ssh-keygen 2>/dev/null || which ssh-keygen.exe 2>/dev/null)"
 
@@ -411,8 +409,6 @@ fi
 if [ -x ./peer-setup.sh ]; then
 	echo -e "\n[PEER-SETUP]"
 	./peer-setup.sh
-fi
-
 fi
 
 # WSL2 Settings
