@@ -420,4 +420,5 @@ if [ ! -z "$IS_WSL" ]; then
 		SHORTCUT_NAME="${SHORTCUT_NAME:-WSL}"
 		wslusc -n "$SHORTCUT_NAME" -g "$HOME/wsl.sh"
 	fi
+	[ -x "$(which docker)" ] && echo "Want Docker?  You'll need https://hub.docker.com/editions/community/docker-ce-desktop-windows/ in Windows."
 fi
