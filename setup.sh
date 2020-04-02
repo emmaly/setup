@@ -10,6 +10,8 @@ DISTRO_VER="$(lsb_release -rs)"
 DISTRO_CODENAME="$(lsb_release -cs)"
 IS_WSL="$(uname -r | grep -qi '\-microsoft-' && echo 1)" # either 1 or empty
 
+if [ -z "zzz" ]; then
+
 # Executable Paths
 SSHKEYGEN="$(which ssh-keygen 2>/dev/null || which ssh-keygen.exe 2>/dev/null)"
 
@@ -411,7 +413,9 @@ if [ -x ./peer-setup.sh ]; then
 	./peer-setup.sh
 fi
 
+fi
+
 # WSL2 Settings
 if [ ! -z "$IS_WSL" ]; then
-	grep -q "export DISPLAY" ~/.bashrc || echo 'export DISPLAY=$(awk \'/nameserver / {print $2; exit}\' /etc/resolv.conf 2>/dev/null):0' | tee -a ~/.bashrc
+	grep -q "export DISPLAY" ~/.bashrc || echo "export DISPLAY=\$(awk '/nameserver / {print \$2; exit}' /etc/resolv.conf 2>/dev/null):0" | tee -a ~/.bashrc >/dev/null
 fi
