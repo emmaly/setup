@@ -13,6 +13,10 @@ IS_WSL="$(uname -r | grep -qi '\-microsoft-' && echo 1)" # either 1 or empty
 # Executable Paths
 SSHKEYGEN="$(which ssh-keygen 2>/dev/null || which ssh-keygen.exe 2>/dev/null)"
 
+# Setup git
+git config --global user.name "Emmaly"
+git config --global user.email "emmaly@emma.ly"
+
 # Create keys, if needed
 echo -e "\n[SSH KEYS]"
 if [ -f ~/.ssh/id_ed25519 ]; then
