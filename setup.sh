@@ -69,7 +69,7 @@ sudo apt-get install -y --no-install-recommends \
 
 # Configure Keychain
 echo -e "\n[KEYCHAIN]"
-grep keychain ~/.bashrc | grep eval >/dev/null || echo 'eval $(keychain --eval id_ed25519)' >> ~/.bashrc
+grep keychain ~/.bashrc | grep eval >/dev/null || echo 'eval $(keychain --eval id_ed25519 2>/dev/null)' >> ~/.bashrc
 
 # Install Docker GPG Key, Repository, Package
 echo -e "\n[DOCKER]"
