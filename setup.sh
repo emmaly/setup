@@ -154,6 +154,12 @@ echo "Installing/updating minikube."
 sudo curl -Lo /usr/local/bin/minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo chmod +x /usr/local/bin/minikube
 
+# Skaffold install
+echo -e "\n[SKAFFOLD]"
+echo "Installing/updating skaffold."
+sudo curl -Lo /usr/local/bin/skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+sudo chmod +x /usr/local/bin/skaffold
+
 # dind-cluster install
 echo -e "\n[DIND-CLUSTER]"
 echo "Installing/updating dind-cluster."
