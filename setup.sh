@@ -163,6 +163,8 @@ curl -Ls https://get.helm.sh/helm-$HELM_TAG-linux-amd64.tar.gz | tar -C /tmp/hel
 sudo cp /tmp/helm-install-$$/linux-amd64/helm /usr/local/bin/helm
 sudo chmod +x /usr/local/bin/helm
 rm -Rf /tmp/helm-install-$$
+grep -q "helm completion bash" ~/.profile || echo "source <(helm completion bash)" | tee -a ~/.profile
+grep -q "helm completion bash" ~/.bashrc || echo "source <(helm completion bash)" | tee -a ~/.bashrc
 
 # Skaffold install
 echo -e "\n[SKAFFOLD]"
