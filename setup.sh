@@ -221,6 +221,8 @@ else
 	grep -q "~/go/bin" ~/.bashrc || echo "PATH=\$PATH:~/go/bin" | tee -a ~/.bashrc
 	#grep -q "GO111MODULE" ~/.profile || echo "export GO111MODULE=on" | tee -a ~/.profile
 	#grep -q "GO111MODULE" ~/.bashrc || echo "export GO111MODULE=on" | tee -a ~/.bashrc
+	grep -q "CGO_ENABLED" ~/.profile || echo "export CGO_ENABLED=0" | tee -a ~/.profile
+	grep -q "CGO_ENABLED" ~/.bashrc || echo "export CGO_ENABLED=0" | tee -a ~/.bashrc
 fi
 
 # node.js
