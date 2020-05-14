@@ -28,7 +28,7 @@ fi
 
 # General Directories
 echo -e "\n[GENERAL DIRECTORIES]"
-mkdir -vp ~/code ~/.local/share ~/.config ~/.yarn/bin
+mkdir -vp ~/go/src ~/.local/share ~/.config ~/.yarn/bin
 
 # Packages
 echo -e "\n[PACKAGES]"
