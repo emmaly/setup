@@ -54,6 +54,7 @@ sudo apt-get install -y --no-install-recommends \
 			iputils-ping \
 			keychain \
 			konsole \
+			libglu1-mesa \
 			libsecret-1-dev \
 			lsb-release \
 			man-db \
@@ -65,7 +66,8 @@ sudo apt-get install -y --no-install-recommends \
 			software-properties-common \
 			wget \
 			whois \
-			unzip
+			unzip \
+			xz-utils
 
 # Configure Keychain
 echo -e "\n[KEYCHAIN]"
@@ -424,6 +426,20 @@ fi
 #	sudo apt-get install -f -y
 #	rm /tmp/keybase.deb
 #fi
+
+# Install Flutter
+if which flutter >/dev/null; then
+	echo "Flutter already installed, skipping."
+else
+	FLUTTER_URL_BASE="https://storage.googleapis.com/flutter_infra/releases/"
+	FLUTTER_URL="${FLUTTER_URL_BASE}$(curl -Ls ${FLUTTER_URL_BASE}releases_linux.json | grep -E '"archive": *"stable/linux/flutter_linux_[0-9]*.[0-9]*.[0-9]*-stable.tar.xz",' | head -n1 | cut -d\" -f4)"
+	sudo mkdir -p /opt/flutter && sudo chown -R $USER: /opt/flutter
+	curl -Ls "$FLUTTER_URL" | tar -C /opt -Jx
+	grep -q "/opt/flutter/bin" ~/.profile || echo "PATH=\$PATH:/opt/flutter/bin" | tee -a ~/.profile
+	cd /opt/flutter/bin
+	./flutter precache
+	cd - >/dev/null
+fi
 
 # Run peer-setup
 if [ -x ./peer-setup.sh ]; then
