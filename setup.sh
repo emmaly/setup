@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Versions
-NODE_REPO_VER=12.x # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
+NODE_REPO_VER=14.x # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
 #FIRACODE_COMMIT=3557a00
 
 ## Update package cache
