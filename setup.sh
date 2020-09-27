@@ -4,6 +4,19 @@
 NODE_REPO_VER=12.x # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
 #FIRACODE_COMMIT=3557a00
 
+## Update package cache
+echo -e "\nUpdating package cache..."
+sudo apt-get update
+
+# Install lsb-release
+echo -e "\n[lsb-release]"
+if which google-chrome >/dev/null; then
+	echo "lsb-release already installed, skipping."
+else
+	sudo apt-get install -y --no-install-recommends \
+				lsb-release
+fi
+
 # Distro
 DISTRO_NAME="$(lsb_release -is | tr -s 'A-Z' 'a-z')"
 DISTRO_VER="$(lsb_release -rs)"
