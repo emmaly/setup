@@ -10,7 +10,7 @@ sudo apt-get update
 
 # Install lsb-release
 echo -e "\n[lsb-release]"
-if which google-chrome >/dev/null; then
+if which lsb-release >/dev/null; then
 	echo "lsb-release already installed, skipping."
 else
 	sudo apt-get install -y --no-install-recommends \
