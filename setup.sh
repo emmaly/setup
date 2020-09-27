@@ -17,6 +17,16 @@ else
 				lsb-release
 fi
 
+
+# Install software-properties-common
+echo -e "\n[software-properties-common]"
+if which software-properties-common >/dev/null; then
+	echo "software-properties-common already installed, skipping."
+else
+	sudo apt-get install -y --no-install-recommends \
+				software-properties-common
+fi
+
 # Distro
 DISTRO_NAME="$(lsb_release -is | tr -s 'A-Z' 'a-z')"
 DISTRO_VER="$(lsb_release -rs)"
