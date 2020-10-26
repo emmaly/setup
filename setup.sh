@@ -278,6 +278,7 @@ yarn global add twilio-cli
 yarn global add @angular/cli
 yarn global add @vue/cli
 yarn global add @google/clasp
+yarn global add @types/google-apps-script
 
 # Setup Fonts
 echo -e "\n[FONTS]"
