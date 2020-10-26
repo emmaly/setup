@@ -255,7 +255,7 @@ else
 		&& sudo apt-get install -y nodejs --no-install-recommends
 fi
 
-# Install packages via yarn
+# Install yarn
 echo -e "\n[YARN]"
 if which yarn; then
 	echo "yarn already installed, skipping."
@@ -266,15 +266,18 @@ else
 		&& sudo apt-get install -y yarn --no-install-recommends
 	grep -q "~/.yarn/bin" ~/.bashrc || \
 		echo 'PATH=$PATH:~/.yarn/bin' >> ~/.bashrc
-	yarn global add bower
-	yarn global add localtunnel
-	yarn global add polymer-cli
-	yarn global add firebase-tools
-	yarn global add webpack webpack-cli
-	yarn global add twilio-cli
-	yarn global add @angular/cli
-	yarn global add @vue/cli
 fi
+
+# Install packages via yarn
+yarn global add bower
+yarn global add localtunnel
+yarn global add polymer-cli
+yarn global add firebase-tools
+yarn global add webpack webpack-cli
+yarn global add twilio-cli
+yarn global add @angular/cli
+yarn global add @vue/cli
+yarn global add @google/clasp
 
 # Setup Fonts
 echo -e "\n[FONTS]"
