@@ -21,7 +21,7 @@ fi
 DISTRO_NAME="$(lsb_release -is | tr -s 'A-Z' 'a-z')"
 DISTRO_VER="$(lsb_release -rs)"
 DISTRO_CODENAME="$(lsb_release -cs)"
-IS_WSL="$(uname -r | grep -qi '\-microsoft-' && echo 1)" # either 1 or empty
+IS_WSL="$(uname -r | grep -qi '\bmicrosoft\b' && echo 1)" # either 1 or empty
 
 # Executable Paths
 SSHKEYGEN="$(which ssh-keygen 2>/dev/null || which ssh-keygen.exe 2>/dev/null)"
