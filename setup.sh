@@ -6,7 +6,7 @@ NODE_REPO_VER=14.x # https://github.com/nodesource/distributions/blob/master/REA
 
 ## Update package cache
 echo -e "\nUpdating package cache..."
-sudo apt-get update
+sudo apt-get update || exit 1
 
 # Install lsb-release
 echo -e "\n[lsb-release]"
@@ -14,7 +14,8 @@ if which lsb-release >/dev/null; then
 	echo "lsb-release already installed, skipping."
 else
 	sudo apt-get install -y --no-install-recommends \
-				lsb-release
+				lsb-release \
+		|| exit 1
 fi
 
 # Distro
@@ -48,9 +49,9 @@ echo -e "\n[PACKAGES]"
 
 ## General Updates
 echo -e "\nUpdating package cache..."
-sudo apt-get update
+sudo apt-get update || exit 1
 echo -e "\nUpgrading packages..."
-sudo apt-get dist-upgrade -y
+sudo apt-get dist-upgrade -y || exit 1
 
 ## Prereqs
 echo -e "\nInstalling some packages..."
@@ -74,12 +75,17 @@ sudo apt-get install -y --no-install-recommends \
 			man-db \
 			nano \
 			powerline \
-			python-pip \
 			software-properties-common \
 			wget \
 			whois \
 			unzip \
-			xz-utils
+			xz-utils \
+	|| exit 1
+sudo apt-get install -y --no-install-recommends \
+			python-pip \
+	|| sudo apt-get install -y --no-install-recommends \
+			python3-pip \
+	|| exit 1
 
 # Configure Keychain
 echo -e "\n[KEYCHAIN]"
