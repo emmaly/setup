@@ -23,6 +23,7 @@ DISTRO_NAME="$(lsb_release -is | tr -s 'A-Z' 'a-z')"
 DISTRO_VER="$(lsb_release -rs)"
 DISTRO_CODENAME="$(lsb_release -cs)"
 IS_WSL="$(uname -r | grep -qi '\bmicrosoft\b' && echo 1)" # either 1 or empty
+IS_CROS="$(test -d /opt/google/cros-containers && which sommelier >/dev/null && echo 1)" # either 1 or empty
 
 # Executable Paths
 SSHKEYGEN="$(which ssh-keygen 2>/dev/null || which ssh-keygen.exe 2>/dev/null)"
@@ -404,8 +405,8 @@ fi
 
 # Android Studio for Chrome OS
 echo -e "\n[Android Studio for Chrome OS]"
-if [ ! -z "$IS_WSL" ]; then
-	echo "Android Studio for Chrome OS should not be installed in WSL, skipping."
+if [ -z "$IS_CROS" ]; then
+	echo "Android Studio for Chrome OS requires Chrome OS, skipping."
 elif [ -x /opt/android-studio/bin/studio.sh ]; then
 	echo "Android Studio already installed, skipping."
 else
