@@ -403,26 +403,52 @@ NdCFTW7wY0Fb1fWJ+/KTsC4=
 	sudo apt update && sudo apt install -y --no-install-recommends code
 fi
 
-# Android Studio for Chrome OS
-echo -e "\n[Android Studio for Chrome OS]"
-if [ -z "$IS_CROS" ]; then
-	echo "Android Studio for Chrome OS requires Chrome OS, skipping."
-elif [ -x /opt/android-studio/bin/studio.sh ]; then
+# Android Studio
+echo -e "\n[Android Studio]"
+if [ -x /opt/android-studio/bin/studio.sh ]; then
+	# We think we already have Android Studio installed.
 	echo "Android Studio already installed, skipping."
+elif [ ! -z "$IS_WSL" ]; then
+	# We're in WSL
+	echo "Android Studio for Windows should be installed in Windows directly." # MAYBE?
 else
+	# We need to install
+
 	curl -Lo /tmp/android-studio.html https://developer.android.com/studio
-	AS_SHANAME=$(grep -Eo "\b[a-f0-9]+\s+android-studio-ide-\S+-cros.deb\b" /tmp/android-studio.html | head -n1)
+
+	if [ -z "$IS_CROS" ]; then
+		# Not ChromeOS
+		AS_SHANAME=$(grep -Eo "\b[a-f0-9]+\s+android-studio-ide-\S+-linux.tar.gz\b" /tmp/android-studio.html | head -n1)
+		AS_EXT="tgz"
+	else
+		# ChromeOS
+		AS_SHANAME=$(grep -Eo "\b[a-f0-9]+\s+android-studio-ide-\S+-cros.deb\b" /tmp/android-studio.html | head -n1)
+		AS_EXT="deb"
+	fi
+
 	AS_SHA=$(cut -d' ' -f1 <<< "$AS_SHANAME")
 	AS_NAME=$(cut -d' ' -f2 <<< "$AS_SHANAME")
 	AS_URL=$(grep -Eo "https://\S+/$AS_NAME" /tmp/android-studio.html | head -n1)
+
 	if [ -z "$AS_URL" ]; then
 		echo "Unable to locate installer URL, failed!"
 	else
-		rm /tmp/android-studio.deb 2>/dev/null
-		curl -Lo /tmp/android-studio.deb "$AS_URL"
-		if [ -f /tmp/android-studio.deb ]; then
-			sudo apt install /tmp/android-studio.deb
-			rm /tmp/android-studio.deb
+		rm /tmp/android-studio.$AS_EXT 2>/dev/null
+		curl -Lo /tmp/android-studio.$AS_EXT "$AS_URL"
+		if [ -f /tmp/android-studio.$AS_EXT ]; then
+			if [ -z "$IS_CROS" ]; then
+				# Not ChromeOS
+				sudo tar -zx --no-same-owner --no-same-permissions -C /opt -f /tmp/android-studio.tgz
+				if [ -x /opt/android-studio/bin/studio.sh ]; then
+					echo "ok!"
+				else
+					echo "... well, that didn't seem to work."
+				fi
+			else
+				# ChromeOS
+				sudo apt install /tmp/android-studio.deb
+			fi
+			rm /tmp/android-studio.$AS_EXT
 		else
 			echo "Android Studio failed to download, failed!"
 		fi
@@ -451,6 +477,7 @@ fi
 #fi
 
 # Install Flutter
+echo -e "\n[FLUTTER]"
 if which flutter >/dev/null; then
 	echo "Flutter already installed, skipping."
 else
@@ -474,6 +501,7 @@ fi
 
 # WSL2 Settings
 if [ ! -z "$IS_WSL" ]; then
+	echo -e "\n[WSL2 SETTINGS]"
 	grep -q "export DISPLAY" ~/.bashrc || echo "export DISPLAY=\$(awk '/nameserver / {print \$2; exit}' /etc/resolv.conf 2>/dev/null):0" | tee -a ~/.bashrc >/dev/null
 	[ ! -f "$HOME/wsl.sh" ] && cp wsl.sh "$HOME/wsl.sh" && chmod 755 "$HOME/wsl.sh"
 	if which wslusc >/dev/null && [ -x "$HOME/wsl.sh" ]; then
