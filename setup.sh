@@ -287,7 +287,7 @@ yarn global add @google/clasp
 yarn global add @types/google-apps-script
 
 # Install Firebase Tools
-curl -sL firebase.tools | bash
+curl -sL firebase.tools | upgrade=true bash
 
 # Setup Fonts
 echo -e "\n[FONTS]"
