@@ -279,13 +279,15 @@ fi
 yarn global add bower
 yarn global add localtunnel
 yarn global add polymer-cli
-yarn global add firebase-tools
 yarn global add webpack webpack-cli
 yarn global add twilio-cli
 yarn global add @angular/cli
 yarn global add @vue/cli
 yarn global add @google/clasp
 yarn global add @types/google-apps-script
+
+# Install Firebase Tools
+curl -sL firebase.tools | bash
 
 # Setup Fonts
 echo -e "\n[FONTS]"
