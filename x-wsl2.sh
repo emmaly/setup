@@ -1,11 +1,13 @@
 #!/bin/bash
 
+[ -z "${DISTRO_NAME}" ] && source x-distrodetect.sh
+
 if [ ! -z "$IS_WSL2" ]; then
 	echo -e "\n[WSL2 SETTINGS]"
 
-    if [ -z "${WAYLAND_DISPLAY}" ]; then
-    	grep -q "export DISPLAY" ~/.bashrc || echo "export DISPLAY=\$(awk '/nameserver / {print \$2; exit}' /etc/resolv.conf 2>/dev/null):0" | tee -a ~/.bashrc >/dev/null
-    fi
+	if [ -z "${WAYLAND_DISPLAY}" ]; then
+		grep -q "export DISPLAY" ~/.bashrc || echo "export DISPLAY=\$(awk '/nameserver / {print \$2; exit}' /etc/resolv.conf 2>/dev/null):0" | tee -a ~/.bashrc >/dev/null
+	fi
 
 	[ ! -f "$HOME/wsl.sh" ] && cp wsl.sh "$HOME/wsl.sh" && chmod 755 "$HOME/wsl.sh"
 
