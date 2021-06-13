@@ -63,6 +63,9 @@ source x-ps1.sh
 # Go
 source x-go.sh
 
+# JDK
+source x-jdk.sh
+
 # Node.js
 source x-nodejs.sh
 
