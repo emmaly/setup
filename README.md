@@ -1,6 +1,6 @@
 # setup
 
-Maintainer: Emmaly Wilson <emmaly@emma.ly>
+Maintainer: Emmaly <emmaly@emma.ly>
 
 Run the usual setup via one of these:
 
