@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Node.js
+NODE_UPGRADE=${NODE_UPGRADE:=no}
 NODE_REPO_VER=16.x # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
 echo -e "\n[NODE.JS ${NODE_REPO_VER}]"
-if which node; then
+if [ "$NODE_UPGRADE" == "no" ] && which node; then
 	echo "node.js already installed, skipping."
 else
 	if [ -z "$NODE_REPO_VER" ]; then
