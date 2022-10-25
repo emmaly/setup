@@ -2,9 +2,13 @@
 
 echo -e "\n[GO]"
 
+WANTARCH="amd64"
+[ $HOSTTYPE = "x86_64" ] && WANTARCH="amd64"
+[ $HOSTTYPE = "aarch64" ] && WANTARCH="arm64"
+
 if which gsutil >/dev/null; then
     echo "Installing/updating Go, if needed."
-    GO_VERSION=$(gsutil ls gs://golang/ | grep -Ev '(rc|beta|asc|sha256)' | grep linux-amd64.tar.gz | cut -d/ -f4 | sed 's/^go//' | sed 's/\.linux-amd64\.tar\.gz$//' | sort --version-sort | tail -n1)
+    GO_VERSION=$(gsutil ls gs://golang/ | grep -Ev '(rc|beta|asc|sha256)' | grep linux-${WANTARCH}.tar.gz | cut -d/ -f4 | sed 's/^go//' | sed "s/\.linux-${WANTARCH}\.tar\.gz\$//" | sort --version-sort | tail -n1)
     if [ -z "$GO_VERSION" ]; then
         echo "********************* GO_VERSION IS EMPTY, WHICH IS BAD.  Perhaps there's an error in Google Storage, or on the Internet connection?  Review it in emmaly/setup/x-go.sh"
     else
@@ -16,7 +20,7 @@ if which gsutil >/dev/null; then
             ### Remove old Go if exists
             sudo rm -Rf /usr/local/go
             ### Fetch new Go, install, and cleanup
-            gsutil cp gs://golang/go${GO_VERSION}.linux-amd64.tar.gz /tmp/go.tgz && \
+            gsutil cp gs://golang/go${GO_VERSION}.linux-${WANTARCH}.tar.gz /tmp/go.tgz && \
             sudo tar -C /usr/local -zxf /tmp/go.tgz && \
             rm /tmp/go.tgz
         fi
